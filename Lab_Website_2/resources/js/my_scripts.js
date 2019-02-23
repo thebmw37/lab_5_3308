@@ -32,8 +32,24 @@ var players = [{name:"John Doe", img: "../resources/img/player1.jpg", alt:"Image
 					 the height will be set to 0.  
 					 To reveal the html tag (toggle - 1), the visibility will be set to visible and
 					 the height will be set to auto.
+
 */
-				
+
+function viewStudentStats(id, toggle)
+{
+	if(toggle === 0)
+	{
+		document.getElementById(id).style.visibility = "hidden"
+		document.getElementById(id).style.height = "0px"
+	}
+	else
+	{
+		document.getElementById(id).style.visibility = "visible"
+		document.getElementById(id).style.height = "auto"
+	}
+
+}
+
 /*
 	Home Page: 
 		changeColor(color) method
@@ -44,6 +60,10 @@ var players = [{name:"John Doe", img: "../resources/img/player1.jpg", alt:"Image
 					 provided parameter.
 */
 
+function changeColor(color)
+{
+	document.body.style.background = color
+}
 
 /*
 	Football Season Stats Page:
@@ -61,6 +81,30 @@ var players = [{name:"John Doe", img: "../resources/img/player1.jpg", alt:"Image
 						
 						4. Update the second table to show the total number of wins/losses for the Buffs.
 */
+
+function loadStatsPage()
+{
+	var table = document.getElementById("stats_table")
+
+	var row_counter;//Keeps track of our row index
+	var home_score;
+	var oppn_score;
+
+	for(var i = 2, row; row = document.getElementById("stats_table").rows[i]; i++)
+	{
+		home_score = row.cells[2].innerHTML;
+		oppn_score = row.cells[3].innerHTML;
+		var winner = row.cells[4];
+		if(parseInt(home_score) > parseInt(oppn_score))
+		{
+			winner.innerHTML = "Home"
+		}
+		else
+		{
+			winner.innerHTML = "Away"
+		}
+	}
+}
 
 /*
 	Football Player Information Page
@@ -104,5 +148,48 @@ var players = [{name:"John Doe", img: "../resources/img/player1.jpg", alt:"Image
 					  avg_r_yards   - the average number of rushing yards for the player's Buff career
 					  avg_rec_yards - the average number of receiving yards for the player's Buff career
 */
-				
+
+function switchPlayers(playerid)
+{
+	var pass_yards = players[playerid].pass_yards
+	var rush_yards = players[playerid].rushing_yards
+	var rec_yards = players[playerid].receiving_yards
+	var games_played = players[playerid].games_played
+
+	document.getElementById("p_year").innerHTML = players[playerid].year
+	document.getElementById("p_major").innerHTML = players[playerid].major
+	document.getElementById("g_played").innerHTML = games_played
+	document.getElementById("p_yards").innerHTML = pass_yards
+	document.getElementById("r_yards").innerHTML = rush_yards
+	document.getElementById("rec_yards").innerHTML = rec_yards
+
+	var avg_pass_yards = pass_yards / games_played
+	var avg_rush_yards = rush_yards / games_played
+	var avg_rec_yards = rec_yards / games_played
+
+	document.getElementById("avg_p_yards").innerHTML = parseInt(avg_pass_yards)
+	document.getElementById("avg_r_yards").innerHTML = parseInt(avg_rush_yards)
+	document.getElementById("avg_rec_yards").innerHTML = parseInt(avg_rec_yards)
+}
+
+function loadPlayersPage()
+{
+	for(var i = 0; i <  players.length; i++)
+        {
+		var anchor = document.createElement("a")
+		var text = document.createTextNode(players[i].name)
+		anchor.appendChild(text)
+		anchor.setAttribute("href", "#")
+		let playerid = i;
+		anchor.addEventListener('click', function() {
+			switchPlayers(playerid)
+		})
+		var player_selector = document.getElementById("player_selector")
+		player_selector.appendChild(anchor)
+        }
+}
+
+
+
+
 
